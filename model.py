@@ -169,8 +169,35 @@ def count_tokens(input_ids):
     count_token = len(input_ids)
     return count_token
 
-# Step 15 - build_training_arguments (not yet solved)
-# TODO: implement
+# Step 15 - build_training_arguments
+from transformers import TrainingArguments 
+
+def build_training_arguments(output_dir='./sft_out', max_steps=5, learning_rate=2e-4):
+    """Return featherweight TrainingArguments for the SFT run."""
+    # TODO: build TrainingArguments with batch size 1, given max_steps, given lr, bf16 or fp16.
+    if torch.cuda.is_bf16_supported() is True:
+        config = TrainingArguments(
+            output_dir=output_dir,
+            max_steps=max_steps,
+            learning_rate=learning_rate,
+            per_device_train_batch_size=1,
+            logging_steps=1,
+            optim='adamw_8bit',
+            bf16=True
+        )
+    
+    else:
+        config = TrainingArguments(
+            output_dir=output_dir,
+            max_steps=max_steps,
+            learning_rate=learning_rate,
+            per_device_train_batch_size=1,
+            logging_steps=1,
+            optim='adamw_8bit',
+            fp16=True
+        )
+
+    return config
 
 # Step 16 - build_sft_trainer (not yet solved)
 # TODO: implement
